@@ -51,4 +51,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.coingecko.jvm.v100rc01)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.android)
+    implementation(libs.github.glide)
+    annotationProcessor(libs.glide.compiler)
 }
