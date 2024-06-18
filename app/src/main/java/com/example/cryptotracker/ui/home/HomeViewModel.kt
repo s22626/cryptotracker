@@ -1,24 +1,36 @@
 package com.example.cryptotracker.ui.home
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import com.example.cryptotracker.PortfolioManager
+import androidx.lifecycle.*
 import coingecko.CoinGeckoClient
-import coingecko.models.coins.CoinMarkets
 import com.example.cryptotracker.model.Coin
 import kotlinx.coroutines.Dispatchers
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val portfolioManager: PortfolioManager) : ViewModel() {
 
     private val coinGecko: CoinGeckoClient = CoinGeckoClient()
 
-    val coins = liveData(Dispatchers.IO) {
-        emit(coinGecko.getCoinMarkets("usd", page = 1, perPage = 10).markets.map { m: CoinMarkets ->
-            Coin(
-                name = m.name,
-                amount = m.circulatingSupply,
-                pricePerUnit = m.currentPrice,
-                logoUrl = m.image
-            )
-        })
+    val coins: LiveData<List<Coin>> = liveData(Dispatchers.IO) {
+        portfolioManager.getAllCoinAmountPairs().collect { coinPairs ->
+            val coinMarkets = coinGecko.getCoinMarkets("usd", page = 1, perPage = 30).markets
+            val coins = coinPairs.mapNotNull { pair ->
+                coinMarkets.find { it.name == pair.first }?.let { market ->
+                    pair.second?.let {
+                        Coin(
+                            name = market.name,
+                            amount = it.toDouble(),
+                            pricePerUnit = market.currentPrice,
+                            logoUrl = market.image
+                        )
+                    }
+                }
+            }
+
+            emit(coins)
+        }
+    }
+
+    val totalValue: LiveData<Float> = coins.map { coins ->
+        coins.sumOf { it.amount * it.pricePerUnit }.toFloat()
     }
 }

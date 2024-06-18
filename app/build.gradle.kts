@@ -56,4 +56,5 @@ dependencies {
     implementation(libs.ktor.client.android)
     implementation(libs.github.glide)
     annotationProcessor(libs.glide.compiler)
+    implementation(libs.androidx.datastore.preferences)
 }
