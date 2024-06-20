@@ -16,9 +16,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 
-rootProject.name = "cryptotracker"
+rootProject.name = "crypto-tracker"
 include(":app")
  
