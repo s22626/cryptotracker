@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -11,8 +12,10 @@ import com.example.cryptotracker.R
 import com.example.cryptotracker.model.Coin
 import com.bumptech.glide.Glide
 
-class CoinAdapter(var coins: List<Coin>) :
+class CoinAdapter(var coins: List<Coin>):
     RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
+
+    var onRemoveClick: ((Coin) -> Unit)? = null
 
     class CoinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val logo: ImageView = itemView.findViewById(R.id.coinLogo)
@@ -20,6 +23,7 @@ class CoinAdapter(var coins: List<Coin>) :
         val amount: TextView = itemView.findViewById(R.id.coinAmount)
         val pricePerUnit: TextView = itemView.findViewById(R.id.coinPricePerUnit)
         val value: TextView = itemView.findViewById(R.id.coinTotalValue)
+        val removeButton: ImageButton = itemView.findViewById(R.id.removeButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
@@ -34,6 +38,10 @@ class CoinAdapter(var coins: List<Coin>) :
         holder.amount.text = "Amount: ${coin.amount}"
         holder.pricePerUnit.text = "Price per unit: ${String.format("%.2f", coin.pricePerUnit)} $"
         holder.value.text = "Value: ${String.format("%.2f", coin.totalValue)} $"
+
+        holder.removeButton.setOnClickListener {
+            onRemoveClick?.invoke(coin)
+        }
 
         Glide.with(holder.logo.context)
             .load(coin.logoUrl)

@@ -42,6 +42,10 @@ class HomeFragment : Fragment() {
         adapter = CoinAdapter(listOf())
         recyclerView.adapter = adapter
 
+        adapter.onRemoveClick = { coin ->
+            homeViewModel.removeCoin(coin.name)
+        }
+
         homeViewModel.coins.observe(viewLifecycleOwner) { coins ->
             adapter.coins = coins
             adapter.notifyDataSetChanged()

@@ -2,17 +2,16 @@ package com.example.cryptotracker.ui.home
 
 import com.example.cryptotracker.PortfolioManager
 import androidx.lifecycle.*
-import coingecko.CoinGeckoClient
+import com.example.cryptotracker.CoinGeckoClientSingleton
 import com.example.cryptotracker.model.Coin
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class HomeViewModel(private val portfolioManager: PortfolioManager) : ViewModel() {
 
-    private val coinGecko: CoinGeckoClient = CoinGeckoClient()
-
     val coins: LiveData<List<Coin>> = liveData(Dispatchers.IO) {
         portfolioManager.getAllCoinAmountPairs().collect { coinPairs ->
-            val coinMarkets = coinGecko.getCoinMarkets("usd", page = 1, perPage = 30).markets
+            val coinMarkets = CoinGeckoClientSingleton.getCoinMarkets().markets
             val coins = coinPairs.mapNotNull { pair ->
                 coinMarkets.find { it.name == pair.first }?.let { market ->
                     pair.second?.let {
@@ -27,6 +26,12 @@ class HomeViewModel(private val portfolioManager: PortfolioManager) : ViewModel(
             }
 
             emit(coins)
+        }
+    }
+
+    fun removeCoin(coin: String) {
+        viewModelScope.launch {
+            portfolioManager.removeCoin(coin)
         }
     }
 

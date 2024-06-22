@@ -1,10 +1,8 @@
 package com.example.cryptotracker
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import coingecko.CoinGeckoClient
 import coingecko.models.coins.CoinMarkets
 import com.example.cryptotracker.model.Coin
 import kotlinx.coroutines.Dispatchers
@@ -14,19 +12,13 @@ import kotlinx.coroutines.launch
 
 class NotificationsViewModel(private val portfolioManager: PortfolioManager) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
-    }
-
     private var alerts = mutableListOf<Alert>()
     private val alertAdapter = AlertAdapter(alerts) { alert ->
         removeTargetPrice(alert.coin)
     }
 
-    private val coinGecko: CoinGeckoClient = CoinGeckoClient()
-
     val coins = liveData(Dispatchers.IO) {
-        emit(coinGecko.getCoinMarkets("usd", page = 1, perPage = 10).markets.map { m: CoinMarkets ->
+        emit(CoinGeckoClientSingleton.getCoinMarkets().markets.map { m: CoinMarkets ->
             Coin(
                 name = m.name,
                 amount = m.circulatingSupply,
@@ -38,9 +30,8 @@ class NotificationsViewModel(private val portfolioManager: PortfolioManager) : V
 
     suspend fun getCurrentPrice(coinName: String): Float? {
         return withContext(Dispatchers.IO) {
-            val coinMarketsList = coinGecko.getCoinMarkets("usd", page = 1, perPage = 10)
-            val coinData = coinMarketsList.markets.find { it.name == coinName }
-            coinData?.currentPrice?.toFloat()
+            val coinData = coins.value?.find { it.name == coinName }
+            coinData?.pricePerUnit?.toFloat()
         }
     }
 

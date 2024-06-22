@@ -20,6 +20,7 @@ interface PortfolioManagerInterface {
     fun getTargetPriceForCoin(coin: String): Flow<Pair<Float?, Boolean?>>
     fun getAllTargetPrices(): Flow<List<Triple<String, Float?, Boolean?>>>
     suspend fun removeTargetPrice(coin: String)
+    suspend fun removeCoin(coin: String)
 }
 
 class PortfolioManager(context: Context) : PortfolioManagerInterface {
@@ -95,6 +96,13 @@ class PortfolioManager(context: Context) : PortfolioManagerInterface {
         dataStore.edit { preferences ->
             preferences.remove(targetPriceKey)
             preferences.remove(isAboveKey)
+        }
+    }
+
+    override suspend fun removeCoin(coin: String) {
+        val coinKey = floatPreferencesKey(coin)
+        dataStore.edit { preferences ->
+            preferences.remove(coinKey)
         }
     }
 }

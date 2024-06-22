@@ -9,7 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import coingecko.CoinGeckoClient
+import coingecko.error.CoinGeckoApiException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -17,7 +17,6 @@ import kotlinx.coroutines.withContext
 class PriceAlertWorker(appContext: Context, workerParams: WorkerParameters) :
     CoroutineWorker(appContext, workerParams) {
 
-    private val coinGeckoClient = CoinGeckoClient()
     private val portfolioManager = PortfolioManager(appContext)
 
     override suspend fun doWork(): Result {
@@ -27,7 +26,7 @@ class PriceAlertWorker(appContext: Context, workerParams: WorkerParameters) :
 
         // Retrieve market data for all these coins
         val coinMarketsList = withContext(Dispatchers.IO) {
-            coinGeckoClient.getCoinMarkets("usd", page = 1, perPage = 10)
+            CoinGeckoClientSingleton.getCoinMarkets()
         }
 
         Log.i("PriceAlertWorker", "coinMarketsList: $coinMarketsList")
@@ -42,7 +41,10 @@ class PriceAlertWorker(appContext: Context, workerParams: WorkerParameters) :
                 Log.i("PriceAlertWorker", "Current price for $coin: $currentPrice")
                 if (currentPrice != null) {
                     if ((isAbove && currentPrice >= targetPrice) || (!isAbove && currentPrice <= targetPrice)) {
-                        Log.i("PriceAlertWorker", "$coin has reached the target price: $currentPrice")
+                        Log.i(
+                            "PriceAlertWorker",
+                            "$coin has reached the target price: $currentPrice"
+                        )
                         sendNotification(coin, currentPrice)
                     }
                 }
@@ -58,9 +60,14 @@ class PriceAlertWorker(appContext: Context, workerParams: WorkerParameters) :
         val channelId = "price_alert_channel"
         val notificationId = coin.hashCode() // Unique notification ID for each coin
 
-        val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, "Price Alerts", NotificationManager.IMPORTANCE_HIGH).apply {
+            val channel = NotificationChannel(
+                channelId,
+                "Price Alerts",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
                 description = "Notifications for price alerts"
             }
             notificationManager.createNotificationChannel(channel)
