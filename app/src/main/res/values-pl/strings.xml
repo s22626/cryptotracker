@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CryptoTracker</string>
+    <string name="title_home">Dom</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Powiadomienia</string>
+    <string name="delete">Usuń</string>
+    <string name="total_value">Suma</string>
+    <string name="amount">Ilość</string>
+    <string name="ppu">Cena za jednostkę</string>
+    <string name="value">Wartość</string>
+    <string name="save">Zapisz</string>
+    <string name="target_price">Cena docelowa</string>
+    <string name="coin_name">Nazwa kryptowaluty</string>
+    <string name="search_coin">Znajdź kryptowalute</string>
+    <string name="enter_amount">Wprowadź ilość</string>
+</resources>

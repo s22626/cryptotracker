@@ -35,9 +35,9 @@ class CoinAdapter(var coins: List<Coin>):
     override fun onBindViewHolder(holder: CoinViewHolder, position: Int) {
         val coin = coins[position]
         holder.name.text = coin.name
-        holder.amount.text = "Amount: ${coin.amount}"
-        holder.pricePerUnit.text = "Price per unit: ${String.format("%.2f", coin.pricePerUnit)} $"
-        holder.value.text = "Value: ${String.format("%.2f", coin.totalValue)} $"
+        holder.amount.text = "${holder.name.context.getString(R.string.amount)}: ${coin.amount}"
+        holder.pricePerUnit.text = "${holder.name.context.getString(R.string.ppu)}: ${String.format("%.2f", coin.pricePerUnit)} $"
+        holder.value.text = "${holder.name.context.getString(R.string.value)}: ${String.format("%.2f", coin.totalValue)} $"
 
         holder.removeButton.setOnClickListener {
             onRemoveClick?.invoke(coin)
