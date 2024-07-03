@@ -1,7 +1,7 @@
 package com.example.cryptotracker.ui.home
 
-import com.example.cryptotracker.PortfolioManager
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cryptotracker.PortfolioManager
 import com.example.cryptotracker.R
 import com.example.cryptotracker.adapters.CoinAdapter
 import com.example.cryptotracker.databinding.FragmentHomeBinding
+import java.util.*
 
 class HomeFragment : Fragment() {
 
@@ -32,6 +34,7 @@ class HomeFragment : Fragment() {
         homeViewModel = ViewModelProvider(this, HomeViewModelFactory(portfolioManager)).get(HomeViewModel::class.java)
         return binding.root
     }
+
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,7 +55,30 @@ class HomeFragment : Fragment() {
         }
 
         homeViewModel.totalValue.observe(viewLifecycleOwner) { totalValue ->
-            binding.totalValue.text = "Total Value: $totalValue USD"
+            binding.totalValue.text = getString(R.string.total_value) + ": $totalValue USD"
         }
+
+        val currentLocale = resources.configuration.locales[0]
+        binding.languageSwitch.isChecked = currentLocale.language == "pl"
+
+        binding.languageSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                setLocale("pl")
+            } else {
+                setLocale("en")
+            }
+        }
+    }
+
+    private fun setLocale(language: String) {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.setLocale(locale)
+        requireContext().createConfigurationContext(config)
+        resources.updateConfiguration(config, resources.displayMetrics)
+
+        // Restart the activity to apply the language change
+        activity?.recreate()
     }
 }
