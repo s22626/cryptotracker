@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 android {
@@ -58,4 +59,5 @@ dependencies {
     implementation(libs.github.glide)
     annotationProcessor(libs.glide.compiler)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.serialization.json)
 }

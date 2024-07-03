@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cryptotracker.CurrencyService
 import com.example.cryptotracker.PortfolioManager
 import com.example.cryptotracker.R
 import com.example.cryptotracker.adapters.CoinAdapter
@@ -31,7 +32,8 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         portfolioManager = PortfolioManager(requireContext())
-        homeViewModel = ViewModelProvider(this, HomeViewModelFactory(portfolioManager)).get(HomeViewModel::class.java)
+        homeViewModel =
+            ViewModelProvider(this, HomeViewModelFactory(portfolioManager, CurrencyService()))[HomeViewModel::class.java]
         return binding.root
     }
 
@@ -42,7 +44,7 @@ class HomeFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recycler)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        adapter = CoinAdapter(listOf())
+        adapter = CoinAdapter(listOf(), homeViewModel.rate)
         recyclerView.adapter = adapter
 
         adapter.onRemoveClick = { coin ->
@@ -54,11 +56,15 @@ class HomeFragment : Fragment() {
             adapter.notifyDataSetChanged()
         }
 
+        val currentLocale = resources.configuration.locales[0]
+
         homeViewModel.totalValue.observe(viewLifecycleOwner) { totalValue ->
-            binding.totalValue.text = getString(R.string.total_value) + ": $totalValue USD"
+            if (currentLocale.language == "pl")
+                binding.totalValue.text = getString(R.string.total_value) + ": ${String.format(Locale.getDefault(), "%.2f", totalValue * homeViewModel.rate)} PLN"
+            else
+                binding.totalValue.text = getString(R.string.total_value) + ": $totalValue $"
         }
 
-        val currentLocale = resources.configuration.locales[0]
         binding.languageSwitch.isChecked = currentLocale.language == "pl"
 
         binding.languageSwitch.setOnCheckedChangeListener { _, isChecked ->
