@@ -6,7 +6,11 @@ import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
-class CurrencyService {
+interface CurrencyServiceI {
+    suspend fun getPLNForUSDRate(): Double
+}
+
+class CurrencyService: CurrencyServiceI {
     private val baseUrl = "https://api.nbp.pl/api/exchangerates/rates/c/usd/today?format=json"
     private val client: HttpClient = HttpClient()
 
@@ -28,7 +32,7 @@ class CurrencyService {
         )
     }
 
-    suspend fun getPLNForUSDRate(): Double {
+    override suspend fun getPLNForUSDRate(): Double {
         client.get(baseUrl).let { response ->
             val currencyResponse = Json.decodeFromString<CurrencyResponse>(response.bodyAsText())
             return currencyResponse.rates[0].bid
