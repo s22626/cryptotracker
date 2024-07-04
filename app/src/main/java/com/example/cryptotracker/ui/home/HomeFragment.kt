@@ -20,7 +20,7 @@ import java.util.*
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
-    private lateinit var binding: FragmentHomeBinding
+    lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: CoinAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var portfolioManager: PortfolioManager
@@ -81,10 +81,9 @@ class HomeFragment : Fragment() {
         Locale.setDefault(locale)
         val config = Configuration()
         config.setLocale(locale)
-        requireContext().createConfigurationContext(config)
-        resources.updateConfiguration(config, resources.displayMetrics)
+        requireContext().resources.updateConfiguration(config, requireContext().resources.displayMetrics)
 
-        // Restart the activity to apply the language change
+        // Recreate the activity to apply the new configuration
         activity?.recreate()
     }
 }
