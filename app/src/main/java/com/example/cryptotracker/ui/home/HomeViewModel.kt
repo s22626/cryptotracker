@@ -3,11 +3,20 @@ package com.example.cryptotracker.ui.home
 import com.example.cryptotracker.PortfolioManager
 import androidx.lifecycle.*
 import com.example.cryptotracker.CoinGeckoClientSingleton
+import com.example.cryptotracker.CurrencyServiceI
 import com.example.cryptotracker.model.Coin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val portfolioManager: PortfolioManager) : ViewModel() {
+class HomeViewModel(private val portfolioManager: PortfolioManager, private val currencyService: CurrencyServiceI) : ViewModel() {
+
+    var rate: Double = 0.0
+
+    init {
+        viewModelScope.launch {
+            rate = currencyService.getPLNForUSDRate()
+        }
+    }
 
     val coins: LiveData<List<Coin>> = liveData(Dispatchers.IO) {
         portfolioManager.getAllCoinAmountPairs().collect { coinPairs ->

@@ -3,4 +3,14 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="delete">Remove</string>
+    <string name="total_value">Total Value</string>
+    <string name="amount">Amount</string>
+    <string name="ppu">Price per unit</string>
+    <string name="value">Value</string>
+    <string name="save">Save</string>
+    <string name="target_price">Target Price</string>
+    <string name="coin_name">Coin Name</string>
+    <string name="search_coin">Search for a coin</string>
+    <string name="enter_amount">Enter the amount</string>
 </resources>

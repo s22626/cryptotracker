@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:text="Coin"
+        android:text="@string/coin_name"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/target_price_text_view"
@@ -24,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Target Price"
+        android:text="@string/target_price"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@id/remove_button"
         app:layout_constraintStart_toEndOf="@id/coin_text_view"
@@ -37,5 +37,5 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Remove"/>
+        android:text="@string/delete"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
