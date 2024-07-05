@@ -60,4 +60,12 @@ dependencies {
     annotationProcessor(libs.glide.compiler)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
+    testImplementation (libs.junit)
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.androidx.core)
+    debugImplementation (libs.androidx.fragment.testing.v136)
+    implementation (libs.androidx.appcompat.v130)
+    androidTestImplementation (libs.androidx.junit.v113)
+    androidTestImplementation (libs.androidx.espresso.core.v340)
+    debugImplementation("androidx.fragment:fragment-testing:1.6.2")
 }
