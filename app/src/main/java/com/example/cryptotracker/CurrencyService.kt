@@ -22,7 +22,7 @@ interface CurrencyServiceI {
  * Fetches data from the NBP API.
  */
 class CurrencyService: CurrencyServiceI {
-    private val baseUrl = "https://api.nbp.pl/api/exchangerates/rates/c/usd/today?format=json"
+    private val baseUrl = "https://api.nbp.pl/api/exchangerates/rates/c/usd?format=json"
     private val client: HttpClient = HttpClient()
 
     companion object {
