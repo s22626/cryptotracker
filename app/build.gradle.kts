@@ -64,6 +64,8 @@ dependencies {
     testImplementation (libs.junit)
     testImplementation (libs.mockito.core)
     testImplementation (libs.androidx.core)
+    testImplementation(libs.kotlin.mockito.kotlin)
+    testImplementation(libs.kotlinx.coroutines.test)
     debugImplementation (libs.androidx.fragment.testing.v136)
     implementation (libs.androidx.appcompat.v130)
     androidTestImplementation (libs.androidx.junit.v113)
