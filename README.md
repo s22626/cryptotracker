@@ -29,12 +29,10 @@ To run CryptoTracker on your local machine, follow these steps:
 - Kotlin - The primary programming language
 - Java - Used for certain components
 - Gradle - Dependency management and build tool
-- JavaScript - For handling certain web-based components
 
 ## Testing
 
 The app includes unit and UI tests. To run these tests, navigate to the `app/src/androidTest/` directory and execute the test suite via Android Studio's test runner.
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit pull requests or open issues to discuss proposed changes or additions.
+HomeFragmentTest:
+![image](https://github.com/s22626/cryptotracker/assets/133409821/1a25217e-5efc-4c85-a045-632919bd65c5)
