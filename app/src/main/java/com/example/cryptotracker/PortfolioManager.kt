@@ -10,19 +10,60 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+/**
+ * Extension property to get the DataStore instance from the Context.
+ */
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "crypto_tracker")
 
+/**
+ * Interface for the portfolio manager.
+ */
 interface PortfolioManagerInterface {
+    /**
+     * Saves the amount of a specific coin.
+     */
     suspend fun saveCoinAmount(coin: String, amount: Float)
+
+    /**
+     * Gets the amount of a specific coin.
+     */
     fun getAmountForCoin(coin: String): Flow<Float?>
+
+    /**
+     * Gets all coin-amount pairs.
+     */
     fun getAllCoinAmountPairs(): Flow<List<Pair<String, Float?>>>
+
+    /**
+     * Saves the target price for a specific coin.
+     */
     suspend fun saveTargetPrice(coin: String, targetPrice: Float, isAbove: Boolean)
+
+    /**
+     * Gets the target price for a specific coin.
+     */
     fun getTargetPriceForCoin(coin: String): Flow<Pair<Float?, Boolean?>>
+
+    /**
+     * Gets all coin-target price pairs.
+     */
     fun getAllTargetPrices(): Flow<List<Triple<String, Float?, Boolean?>>>
+
+    /**
+     * Removes the target price for a specific coin.
+     */
     suspend fun removeTargetPrice(coin: String)
+
+    /**
+     * Removes a specific coin.
+     */
     suspend fun removeCoin(coin: String)
 }
 
+/**
+ * Implementation of the PortfolioManagerInterface.
+ * Manages the portfolio of coins.
+ */
 class PortfolioManager(context: Context) : PortfolioManagerInterface {
 
     private val dataStore: DataStore<Preferences> = context.dataStore

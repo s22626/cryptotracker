@@ -14,11 +14,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
+/**
+ * Worker class for checking price alerts.
+ * This class extends CoroutineWorker and overrides the doWork function to check if any of the coins have reached their target price.
+ * If a coin has reached its target price, a notification is sent.
+ * @property portfolioManager The PortfolioManager instance used to get the target prices for the coins.
+ */
 class PriceAlertWorker(appContext: Context, workerParams: WorkerParameters) :
     CoroutineWorker(appContext, workerParams) {
 
     private val portfolioManager = PortfolioManager(appContext)
 
+    /**
+     * The function that is called when the worker is executed.
+     * This function checks if any of the coins have reached their target price and sends a notification if they have.
+     * @return The result of the worker execution.
+     */
     override suspend fun doWork(): Result {
         Log.i("PriceAlertWorker", "doWork called")
         val coinsWithTargets = portfolioManager.getAllTargetPrices().first()
@@ -54,6 +65,11 @@ class PriceAlertWorker(appContext: Context, workerParams: WorkerParameters) :
         return Result.success()
     }
 
+    /**
+     * Sends a notification that a coin has reached its target price.
+     * @param coin The name of the coin.
+     * @param currentPrice The current price of the coin.
+     */
     @SuppressLint("MissingPermission")
     private fun sendNotification(coin: String, currentPrice: Double) {
         Log.i("PriceAlertWorker", "sendNotification called for $coin")
