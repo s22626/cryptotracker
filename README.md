@@ -35,4 +35,10 @@ To run CryptoTracker on your local machine, follow these steps:
 The app includes unit and UI tests. To run these tests, navigate to the `app/src/androidTest/` directory and execute the test suite via Android Studio's test runner.
 
 HomeFragmentTest:
+
 ![image](https://github.com/s22626/cryptotracker/assets/133409821/1a25217e-5efc-4c85-a045-632919bd65c5)
+
+HomeViewModelTest:
+
+![image](https://github.com/s22626/cryptotracker/assets/133409821/eca2bfb6-d9aa-47e9-baa6-4c92f7ed54cb)
+
