@@ -4,8 +4,7 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.cryptotracker.ui.home.HomeFragment
 import org.junit.Test
@@ -22,13 +21,23 @@ class HomeFragmentTest {
         val initialLocale = Locale.getDefault().language
 
         TimeUnit.SECONDS.sleep(2)
+
         onView(withId(R.id.totalValue)).check(matches(withText(getExpectedString(initialLocale))))
+        onView(withId(R.id.labelEN)).check(matches(withText("EN")))
+        onView(withId(R.id.labelPL)).check(matches(withText("PL")))
+
+        onView(withId(R.id.recycler)).check(matches(isDisplayed()))
 
         performLanguageSwitch()
         scenario.recreate()
+
         onView(withId(R.id.totalValue)).check(matches(withText(getExpectedString("pl"))))
 
         performLanguageSwitch()
+        scenario.recreate()
+
+        onView(withId(R.id.totalValue)).check(matches(withText(getExpectedString(initialLocale))))
+
         scenario.recreate()
         onView(withId(R.id.totalValue)).check(matches(withText(getExpectedString(initialLocale))))
     }
